@@ -3,6 +3,7 @@ require 'timeout'
 require 'open-uri'
 require 'cgi'
 require 'hpricot'
+require 'simple_google_custom_search/railtie' if defined?(Rails)
 
 module SimpleGoogleCustomSearch
   autoload :ResultSet, 'simple_google_custom_search/result_set'
@@ -21,7 +22,7 @@ module SimpleGoogleCustomSearch
     return nil unless resp = fetch(uri)
     
     if resp.status.first == '200'
-      parse(resp, page_size)
+      parse(resp, page_size, query)
     else
       nil
     end
@@ -42,11 +43,11 @@ module SimpleGoogleCustomSearch
     resp
   end
   
-  def parse(resp, page_size)
+  def parse(resp, page_size, query)
     parsed = Hpricot(resp.read.encode("UTF-8"))
     number_of_results = (parsed/'div#resultStats').first.inner_text.to_s[/(\S*) result/i, 1].try(:gsub, ',', '').try(:to_i) || 0
     total_pages = ( number_of_results%page_size == 0 ) ? number_of_results/page_size : number_of_results/page_size + 1 
-    result_set = SimpleGoogleCustomSearch::ResultSet.new({total: number_of_results, total_pages: total_pages})
+    result_set = SimpleGoogleCustomSearch::ResultSet.new({total: number_of_results, total_pages: total_pages, query: query})
     result_set.item = (parsed/"li.g").map do |ele|
       SimpleGoogleCustomSearch::Result.new({
         :title => ele.at("a").inner_text,
