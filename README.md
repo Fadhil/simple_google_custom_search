@@ -1,4 +1,4 @@
-# SimpleGoogleCustomSearch
+# SimpleGoogleCustomSearch (Forked from https://github.com/cherwei/simple_google_custom_search)
 
 With Simple Google Custom Search, help people search what they need in your website just like in official google site.
 
@@ -28,12 +28,13 @@ You need to define a <tt>constant variable</tt> for the API to search the matchi
 
 To perform a search:
 
-    results = SimpleGoogleCustomSearch.search("simple", offset +optional+)
+    results = SimpleGoogleCustomSearch.search("simple", page_number)
 
 The +results+ variable is now a SimpleGoogleCustomSearch::ResultSet object:
 
     results.total            # number of results (integer)
     results.item             # array of result objects (SimpleGoogleCustomSearch::Result)
+    results.total_pages      # total number of pages returned
 
 Iterate through the results:
 
@@ -46,7 +47,6 @@ Iterate through the results:
 ## TODO
 
 1. Unit Test
-2. Add Pagination
 
 ## Contributing
 
