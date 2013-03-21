@@ -43,6 +43,10 @@ Iterate through the results:
         result.link            # result URL
         result.description     # excerpt, with terms highlighted
     end
+    
+Show pagination links:
+    
+    sgcs_paginate(results)      # renders pagination links 10 pages at a time
 
 ## TODO
 
